@@ -1,0 +1,53 @@
+﻿@model TestAuto.Models.Car
+
+<fieldset>
+    <legend>Autó</legend>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Type):
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Type):
+    </div>
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.SiteId):
+    </div>
+    <div class="display-field">
+        @Model.Site.ToString()
+    </div>
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Manufacturer):
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Manufacturer)
+    </div>
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.Year):
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Year):
+    </div>
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.Productiondate):
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Productiondate)
+    </div>
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.Condition):
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Condition)
+    </div>
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.Owners):
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Owners)
+    </div>
+
+</fieldset>
+<p>
+    @Html.ActionLink("Szerkesztés", "Edit", new { id=Model.CarId }) |
+    @Html.ActionLink("Listanézet", "List")
+</p>

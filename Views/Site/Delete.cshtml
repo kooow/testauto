@@ -1,0 +1,48 @@
+﻿@model TestAuto.Models.Site
+
+<h3>Biztos, hogy törölni akarja?</h3>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+<fieldset>
+    <legend>Telephely törlése</legend>
+
+    @Html.HiddenFor(s =>s.SiteId)
+
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.City):
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.City)
+    </div>
+
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.Address)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Address)
+    </div>
+
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.PostCode):
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.PostCode):
+    </div>
+ 
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.ParkingSpace)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.ParkingSpace)
+    </div>
+
+    <p>
+        <input type="submit" value="Törlés" /> |
+        @Html.ActionLink("Listanézet", "List")
+    </p>
+</fieldset>
+      
+}

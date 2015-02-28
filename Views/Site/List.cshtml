@@ -1,0 +1,49 @@
+﻿@model IEnumerable<TestAuto.Models.Site>
+
+<p>
+    @Html.ActionLink("Új telephely felvétele", "Create")
+</p>
+<table>
+    <tr style="border-bottom: 1px solid grey;">
+        <th class="lista_th">
+            @Html.DisplayNameFor(model => model.City)
+        </th>
+        <th class="lista_th">
+            @Html.DisplayNameFor(model => model.Address)
+        </th>
+        <th class="lista_th">
+            @Html.DisplayNameFor(model => model.Postcode)
+        </th>
+        <th class="lista_th">
+            @Html.DisplayNameFor(model => model.Parkingspace)
+        </th>
+
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(m => item.City)
+            </td>
+             
+            <td>
+                @Html.DisplayFor(modelItem => item.Address)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Postcode)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Parkingspace)
+            </td>
+               
+            <td>
+                @Html.ActionLink("Szerkesztés", "Edit", new { id = item.SiteId }) |
+                @Html.ActionLink("Tulajdonságok", "Details", new { id = item.SiteId })
+         
+            </td>
+        </tr>
+    }
+    
+</table>

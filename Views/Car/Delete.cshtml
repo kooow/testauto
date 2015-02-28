@@ -1,0 +1,61 @@
+﻿@model TestAuto.Models.Car
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+<h3>Biztosan törölni akarod ezt az autót?</h3>
+<fieldset>
+    <legend>Autó</legend>
+
+    @Html.HiddenFor(c=> c.CarId)
+
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.SiteId):
+    </div>
+    <div class="display-field">
+        @Model.Site.ToString()
+    </div>
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Type):
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Type)
+    </div>
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Manufacturer):
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Manufacturer)
+    </div>
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.Year):
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Year)
+    </div>
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.Productiondate):
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Productiondate)
+    </div>
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.Condition):
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Condition)
+    </div>
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.Owners):
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Owners)
+    </div>
+
+    <p>
+        <input type="submit" value="Törlés" /> |
+        @Html.ActionLink("Listanézet", "List")
+    </p>
+</fieldset>
+  
+}

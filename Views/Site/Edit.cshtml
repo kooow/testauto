@@ -1,0 +1,61 @@
+﻿@model TestAuto.Models.Site
+
+<script src="~/Scripts/jquery-1.8.2.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>Auto</legend>
+
+        @Html.HiddenFor(model => model.SiteId)
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.City)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.City, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.City)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Address)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Address, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Address)
+        </div>
+
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Postcode)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Postcode, new { @class = "form-control", @type = "number" })
+            @Html.ValidationMessageFor(model => model.Postcode)
+        </div>
+
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Parkingspace)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Parkingspace, new { @class = "form-control", @type = "number" })
+            @Html.ValidationMessageFor(model => model.Parkingspace)
+        </div>
+
+        <p>
+            <input type="submit" value="Mentés" />
+        </p>
+    </fieldset>
+}
+<div>
+    @Html.ActionLink("Listanézet", "List")
+</div>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

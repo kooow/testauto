@@ -1,0 +1,279 @@
+﻿@model PagedList.IPagedList<TestAuto.Models.Car>
+
+@using PagedList.Mvc;
+@using TestAuto.Helper;
+@using TestAuto.Models;
+
+<style>
+
+    .sortspanlink:hover
+    {
+        cursor: pointer;
+    }
+
+    .sortdesc::after
+    {
+        content: "↑";
+        color: #428bca;
+    }
+
+    .sortasc::after
+    {
+       content: "↓";
+       color: #428bca;
+    }
+
+    #FilterTr
+    {
+        border-bottom: 1px solid black;
+    }
+
+</style>
+
+<p>
+    @Html.ActionLink("Új autó felvétele", "Create")
+</p>
+
+@using (Html.BeginForm("List", "Car", FormMethod.Get, new { @id="carlistform" } ))
+{
+    <table id="CarTable">
+        <tr>
+            <th class="lista_th">
+                <span id="SiteSort" class="sortspanlink sortasc">Telephely</span>
+            </th>
+            <th class="lista_th">
+                <span id="TypeSort" class="sortspanlink sortasc">Típus</span>
+            </th>
+            <th class="lista_th">
+                <span id="ManufacturerSort" class="sortspanlink sortasc">Gyártó</span>
+            </th>
+            <th class="lista_th">
+                <span id="YearSort" class="sortspanlink sortasc">Évjárat</span>    
+            </th>
+            <th class="lista_th">
+                <span id="ProductiondateSort" class="sortspanlink sortasc">Gyártási idő</span>
+            </th>
+            <th class="lista_th">
+                <span id="ConditionSort" class="sortspanlink sortasc">Állapot</span>
+            </th>
+            <th class="lista_th">
+                <span id="OwnersSort" class="sortspanlink sortasc">Tulajdonosok száma</span>
+            </th>
+
+            <th style="min-width: 280px;"></th>
+        </tr>
+        <tr id="FilterTr">
+            <td>
+                @Html.DropDownList("SiteId", CshtmlHelper.GetSites(0, true), new { @class = "form-control" })
+            </td>
+            <td>
+                @Html.TextBox("Type", "", new { @style = "width:130px;" })
+            </td>
+            <td>
+                @Html.TextBox("Manufacturer", "", new { @style = "width:130px;" })
+            </td>
+            <td>
+                @Html.DropDownList("Year", CshtmlHelper.GetYears(2015, true, null), new { @class = "form-control", @style = "width:60px;" })
+            </td>
+            <td>
+                @Html.TextBox("Productiondate", "", new { @class = "form-control", @style = "width:150px;" })
+            </td>
+            <td>
+                @Html.TextBox("Condition", "", new { @style = "width:130px;" })
+            </td>
+            <td>
+                @Html.TextBox("Owners", "", new { @type = "number", @style = "width:80px;" })
+            </td>
+            <td></td>
+        </tr>
+     
+    @foreach (var item in Model)
+    {
+        <tr class="car_tr">
+            <td>
+                @item.Site.ToString()
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Type)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Manufacturer)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Year)
+            </td>
+            <td>
+                @item.Productiondate.ToShortDateString()
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Condition)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Owners)
+            </td>
+
+            <td>
+                @Html.ActionLink("Szerkesztés", "Edit", new { id = item.CarId }) |
+                @Html.ActionLink("Tulajdonságok", "Details", new { id = item.CarId }) |
+                @Html.ActionLink("Törlés", "Delete", new { id = item.CarId })
+            </td>
+        </tr>
+    }
+  
+</table>
+}
+   <br />
+<div id="PageDiv">
+    Aktuális Lap: @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) / Összes: @Model.PageCount
+</div>
+
+<div>
+    @Html.PagedListPager(Model, page => Url.Action("List", new { page, sort = ViewBag.CurrentSort }))
+</div>
+
+
+<script type="text/javascript">
+
+    // dátummező inicializálása
+    $(document).ready(function () {
+        $('#Productiondate').datepicker();
+
+    });
+
+
+    /* var alist = $(".lista_th a");
+
+     $.each(alist, function (i, alink) {
+
+         var a_href = $(alink).attr('href').toString("");
+         if (a_href.lastIndexOf('desc') == (a_href.length - 4))
+         {
+             $(alink).html( $(alink).html()+ "<span>↑</span>");
+         }
+         else
+         {
+             $(alink).html(  $(alink).html() + "<span>↓</span>");
+         }
+
+     });*/
+
+    $("#carlistform select").on('input', function () {
+        inputchange();
+    });
+
+    //
+    $("#carlistform input").on('input', function () {
+        inputchange();
+    });
+
+
+    // bemenet változásara lefutó függvény
+    function inputchange() {
+
+        var data = {};
+
+
+        // sorbarendezéshez szükséges elemek
+        $.each($(".sortspanlink"), function (i, element) {
+
+            data["sortDictionary[" + i + "].Key"] = element.id;
+            data["sortDictionary[" + i + "].Value"] = ($(element).hasClass('sortasc') ? "asc" : "desc");
+
+        });
+
+        // szűréshez szükséges elemek
+
+        var filterinputs = $("#carlistform").serializeArray();
+
+        $.each(filterinputs, function (i, element) {
+
+            data["filterDictionary[" + i + "].Key"] = element.name;
+            data["filterDictionary[" + i + "].Value"] = element.value;
+
+        });
+
+        // debugger;
+
+        $.ajax({
+            url: '@Url.Action("List", "CarAsynch")',
+            type: 'POST',
+            data: data,
+            dataType: 'json',
+            success: showResult
+        });
+
+    }
+
+
+    $(".sortspanlink").click(function () {
+
+        //   debugger;
+
+        if ($(this).hasClass('sortdesc')) {
+            $(this).removeClass('sortdesc').addClass('sortasc');
+        }
+        else if ($(this).hasClass('sortasc')) {
+            $(this).removeClass('sortasc').addClass('sortdesc');
+        }
+
+        inputchange();
+    });
+
+    //
+    function showResult(results) {
+
+        $("#CarTable").find(".car_tr").remove();
+
+        var cars = jQuery.parseJSON(results);
+
+        var simpleconvert = new Array("Type", "Manufacturer", "Year", "Productiondate", "Condition", "Owners");
+
+        for (var ci = 0; ci < cars.length; ci++) {
+            var car_object = cars[ci];
+
+            var car_tr = $("<tr>");
+            car_tr.addClass("car_tr");
+
+            var site_td = $("<td>");
+
+            site_td.html(car_object.Site); //.City + " " + car_object.Site.Address + " " + car_object.Site.Postcode );
+
+            car_tr.append(site_td);
+
+            for (var si = 0; si < simpleconvert.length; si++) {
+                var prop_td = $("<td>");
+
+                prop_td.html(car_object[simpleconvert[si]]);
+                car_tr.append(prop_td);
+            }
+
+            var edit_td = $("<td>");
+            // edit_td.html('edit');
+
+
+            var edit_link = '@Html.ActionLink("Szerkesztés", "Edit", new { id = "_carid_"  })';
+            edit_link = edit_link.replace('_carid_', car_object.CardId);
+
+            var details_link = '@Html.ActionLink("Tulajdonságok", "Details", new { id = "_carid_" })';    
+            details_link = details_link.replace('_carid_', car_object.CardId);
+
+            var delete_link = '@Html.ActionLink("Törlés", "Delete", new { id = "_carid_" })';
+            delete_link = delete_link.replace('_carid_', car_object.CardId);
+
+
+          //  edit_link.attr('href', edit_href);
+         //   edit_link.html('Szerkesztés');
+
+            edit_td.html(edit_link + "| " + details_link + " | " + delete_link);
+
+            car_tr.append(edit_td);
+
+            //type_td.html(car_object.Type);
+
+            $("#CarTable").append(car_tr);
+
+        }
+
+    }
+
+</script>

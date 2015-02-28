@@ -1,0 +1,37 @@
+﻿@model TestAuto.Models.Site
+
+<fieldset>
+    <legend>Telephely tulajdonságai</legend>
+
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.City):
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.City)
+    </div>
+
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.Address):
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Address)
+    </div>
+
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.Postcode):
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Postcode)
+    </div>
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.Parkingspace):
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Parkingspace)
+    </div>
+
+</fieldset>
+<p>
+    @Html.ActionLink("Szerkesztés", "Edit", new { id = Model.SiteId }) |
+    @Html.ActionLink("Listanézet", "List")
+</p>

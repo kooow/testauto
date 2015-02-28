@@ -1,0 +1,92 @@
+﻿@using TestAuto.Helper;
+@model TestAuto.Models.Car
+
+
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>Car</legend>
+
+        @Html.HiddenFor(model => model.CarId)
+
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.SiteId)
+        </div>
+        <div class="editor-field">
+            @Html.DropDownListFor(model => model.SiteId, CshtmlHelper.GetSites(0), new { @class = "form-control", @style = "width:150px;" })
+            @Html.ValidationMessageFor(model => model.SiteId)
+        </div>
+
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Manufacturer)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Manufacturer, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Manufacturer)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Type)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Type, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Type)
+        </div>
+
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Year)
+        </div>
+        <div class="editor-field">
+            @Html.DropDownListFor(model => model.Year, CshtmlHelper.GetYears(2015, false,null), new { @class = "form-control", @style = "width:150px;" })
+            @Html.ValidationMessageFor(model => model.Year)
+        </div>
+
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Productiondate)
+        </div>
+        <div class="editor-field">
+
+            @Html.TextBox("Productiondate",  Model.Productiondate.ToString("yyyy.MM.dd.") , new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Productiondate)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Condition)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Condition, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Condition)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Owners)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Owners, new { @class = "form-control", @type = "number" })
+            @Html.ValidationMessageFor(model => model.Owners)
+        </div>
+
+        <p>
+            <input type="submit" value="Mentés" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Listanézet", "List")
+</div>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $('#Productiondate').datepicker();
+
+    });
+
+</script>
