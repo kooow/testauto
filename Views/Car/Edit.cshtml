@@ -1,5 +1,7 @@
 ﻿@using TestAuto.Helper;
-@model TestAuto.Models.Car
+@using TestAuto.Models;
+
+@model Car
 
 
 @using (Html.BeginForm()) {
@@ -16,7 +18,7 @@
             @Html.LabelFor(model => model.SiteId)
         </div>
         <div class="editor-field">
-            @Html.DropDownListFor(model => model.SiteId, CshtmlHelper.GetSites(0), new { @class = "form-control", @style = "width:150px;" })
+            @Html.DropDownListFor(model => model.SiteId,  new SelectList(ViewBag.SiteList as List<Site>, "SiteId", "FullName", Model.SiteId), new { @class = "form-control", @style = "width:150px;" })
             @Html.ValidationMessageFor(model => model.SiteId)
         </div>
 

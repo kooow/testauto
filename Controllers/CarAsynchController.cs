@@ -24,6 +24,19 @@ namespace TestAuto.Controllers
     [SessionState(SessionStateBehavior.Disabled)]
     public class CarAsynchController : AsyncController
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        private ISession session;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="helper">injektált helper</param>
+        public CarAsynchController(NHibernateHelper helper)
+        {
+            this.session = helper.SessionFactory.GetCurrentSession();
+        }
 
         /// <summary>
         /// 
@@ -38,8 +51,6 @@ namespace TestAuto.Controllers
         {
 
             List<object> objs = new List<object>();
-
-            ISession session =  MvcApplication.NHibernateSessionFactory.GetCurrentSession();
 
             ICriteria ic = session.CreateCriteria<Car>("car");
             ic = ic.CreateAlias("Site", "s");

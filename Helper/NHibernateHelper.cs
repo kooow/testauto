@@ -22,43 +22,53 @@ namespace TestAuto.Helper
     /// 
     /// 
     /// </summary>
-    public static class NHibernateHelper
+    public class NHibernateHelper
     {
 
         /// <summary>
         /// 
-        ///  isessionfactory singleton
+        /// </summary>
+        private ISessionFactory sessionFactory;
+        
+        /// <summary>
         /// 
         /// </summary>
-        /// <returns></returns>
-        public static ISessionFactory GetNHibernateSessionFactory()
+        public ISessionFactory SessionFactory 
+        { 
+            get
+            {
+                return sessionFactory;
+            }        
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public NHibernateHelper()
         {
 
+            Configuration conf = new NHibernate.Cfg.Configuration();
 
-            Configuration conf = new NHibernate.Cfg.Configuration(); 
-           
             conf.DataBaseIntegration(delegate(NHibernate.Cfg.Loquacious.IDbIntegrationConfigurationProperties dbi)
             {
                 dbi.ConnectionProvider<NHibernate.Connection.DriverConnectionProvider>();
                 dbi.ConnectionStringName = "testAutoHibernate";
                 dbi.Dialect<NHibernate.Dialect.MsSql2012Dialect>();
                 dbi.Driver<NHibernate.Driver.SqlClientDriver>();
-
             });
-    
+
             // nhibernate konfiguráció
             FluentConfiguration fluent_conf = Fluently.Configure(conf);
 
             fluent_conf.CurrentSessionContext<WebSessionContext>();
 
-            ISessionFactory sessionFactory = fluent_conf              
-                  .Mappings(m => m.FluentMappings.Add<CarMapping>())
-                  .Mappings(m => m.FluentMappings.Add<SiteMapping>())                      
-                  .BuildSessionFactory();
+            sessionFactory = fluent_conf
+              .Mappings(m => m.FluentMappings.Add<CarMapping>())
+              .Mappings(m => m.FluentMappings.Add<SiteMapping>())
+              .BuildSessionFactory();
 
-      
-            return sessionFactory;
         }
+ 
 
     }
 }

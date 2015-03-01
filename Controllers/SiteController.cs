@@ -1,8 +1,10 @@
-﻿using System;
+﻿using NHibernate;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using TestAuto.Helper;
 using TestAuto.Models;
 using TestAuto.Models.Repositories;
 
@@ -23,9 +25,12 @@ namespace TestAuto.Controllers
         /// <summary>
         /// 
         /// </summary>
-        public SiteController()
+        /// <param name="helper">injektált helper</param>
+        public SiteController(NHibernateHelper helper)
         {
-            this.siteRepository = new SiteRepository(MvcApplication.NHibernateSessionFactory.GetCurrentSession());
+            ISession nhSession = helper.SessionFactory.GetCurrentSession();
+
+            this.siteRepository = new SiteRepository(nhSession);
         }
 
         /// <summary>

@@ -9,6 +9,9 @@ using TestAuto.Models.Repositories;
 using PagedList;
 using System.ComponentModel.DataAnnotations;
 using TestAuto.Helper;
+using Autofac;
+using Autofac.Core;
+using Autofac.Integration.Mvc;
 
 namespace TestAuto.Controllers
 {
@@ -32,14 +35,40 @@ namespace TestAuto.Controllers
 
         /// <summary>
         /// 
+        /// 
+        /// 
         /// </summary>
-        public CarController()
+        /// <param name="helper">injektált helper</param>
+        public CarController(NHibernateHelper helper)
         {
 
-            this.carRepository = new CarRepository(MvcApplication.NHibernateSessionFactory.GetCurrentSession());
-            this.siteRepository = new SiteRepository(MvcApplication.NHibernateSessionFactory.GetCurrentSession());
+            ISession nhSession = helper.SessionFactory.GetCurrentSession();
+
+            this.carRepository = new CarRepository(nhSession);
+            this.siteRepository = new SiteRepository(nhSession);
         }
 
+        /// <summary>
+        /// 
+        /// Telephelyek lekérdezése
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<SelectListItem> GetSitesWithEmpty()
+        {
+            List<SelectListItem> sites = new List<SelectListItem>();
+
+            sites.Add(new SelectListItem());
+            
+            foreach (Site site in siteRepository.List())
+            {
+                SelectListItem site_item = new SelectListItem { Value = site.SiteId.ToString(), Text = site.ToString() };
+                sites.Add(site_item);
+            }
+
+            return sites;
+        }
+        
         /// <summary>
         /// 
         /// listanézet
@@ -49,22 +78,12 @@ namespace TestAuto.Controllers
         public ActionResult List(int? page)
         {
 
-            string sort = "site";
-
             IList<Car> cars = this.carRepository.List();
 
-            if (sort == "site")
-            {
-                cars = cars.OrderBy(c => (c.Site.City + " " + c.Site.Address + c.Site.Postcode)).ToList();
-            }
-            else if (sort == "site_desc")
-            {
-                cars = cars.OrderByDescending(c => (c.Site.City + " " + c.Site.Address + c.Site.Postcode)).ToList();
-            }
-      
             int pageNumber = (page ?? 1);
 
-            ViewBag.CurrentSort = sort;
+            ViewBag.SiteList = this.siteRepository.List();
+            ViewBag.SitesWithEmpty = GetSitesWithEmpty();
 
             return View(cars.ToPagedList(pageNumber, CshtmlHelper.PAGESIZE));
         }
@@ -75,6 +94,8 @@ namespace TestAuto.Controllers
         /// <returns></returns>
         public ActionResult Create()
         {
+            ViewBag.SiteList = this.siteRepository.List();
+
             return View();
         }
 
@@ -97,6 +118,8 @@ namespace TestAuto.Controllers
                     this.carRepository.Create(car);
                 }
 
+                ViewBag.SiteList = this.siteRepository.List();
+                ViewBag.SitesWithEmpty = GetSitesWithEmpty();
                 return RedirectToAction("List");
             }
             catch (Exception exception)
@@ -113,6 +136,8 @@ namespace TestAuto.Controllers
         public ActionResult Edit(int id)
         {
             Car car = this.carRepository.Get(id);
+            ViewBag.SiteList = this.siteRepository.List();
+     
 
             return View(car);
         }
@@ -137,6 +162,8 @@ namespace TestAuto.Controllers
 
                     this.carRepository.Update(car);                 
                 }
+
+                ViewBag.SitesWithEmpty = GetSitesWithEmpty();
                 return RedirectToAction("List");
             }
             catch (Exception exception)
@@ -186,6 +213,8 @@ namespace TestAuto.Controllers
                 Car deleteCar = this.carRepository.Get(car.CarId);
 
                 this.carRepository.Delete(deleteCar);
+
+                ViewBag.SitesWithEmpty = GetSitesWithEmpty();
 
                 return RedirectToAction("List");
             }

@@ -66,6 +66,17 @@ namespace TestAuto.Models
         public virtual IList<Car> Cars { get; set;  }
 
         /// <summary>
+        /// 
+        /// </summary>
+        public virtual string FullName
+        {
+            get
+            {
+                return this.City + " " + this.Address + " " + this.Postcode.ToString();
+            }
+        }
+
+        /// <summary>
         /// név helyett
         /// </summary>
         /// <returns></returns>

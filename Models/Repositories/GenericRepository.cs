@@ -113,6 +113,9 @@ namespace TestAuto.Models.Repositories
            return hibernateSession.Get<TEntity>(id);
         }
 
+
+
+
     }
 
 }

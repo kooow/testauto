@@ -37,7 +37,7 @@
         @Html.DisplayNameFor(model => model.Productiondate):
     </div>
     <div class="display-field">
-        @Html.DisplayFor(model => model.Productiondate)
+        @Model.Productiondate.ToShortDateString()
     </div>
     <div class="display-label">
         @Html.DisplayNameFor(model => model.Condition):

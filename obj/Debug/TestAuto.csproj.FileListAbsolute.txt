@@ -88,4 +88,9 @@ D:\source\asp.net\TestAuto\TestAuto\bin\PagedList.dll
 D:\source\asp.net\TestAuto\TestAuto\bin\PagedList.Mvc.dll
 D:\source\asp.net\TestAuto\TestAuto\bin\PagedList.xml
 D:\source\asp.net\TestAuto\TestAuto\bin\PagedList.Mvc.xml
-D:\source\asp.net\TestAuto\TestAuto\obj\Debug\TestAuto.csprojResolveAssemblyReference.cache
+D:\source\asp.net\TestAuto\TestAuto\bin\Autofac.dll
+D:\source\asp.net\TestAuto\TestAuto\bin\Autofac.Extras.NHibernate.dll
+D:\source\asp.net\TestAuto\TestAuto\bin\Autofac.Integration.Mvc.dll
+D:\source\asp.net\TestAuto\TestAuto\bin\Autofac.xml
+D:\source\asp.net\TestAuto\TestAuto\bin\Autofac.Extras.NHibernate.xml
+D:\source\asp.net\TestAuto\TestAuto\bin\Autofac.Integration.Mvc.xml

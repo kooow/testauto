@@ -1,4 +1,5 @@
 ﻿@using TestAuto.Helper;
+@using TestAuto.Models;
 
 @model TestAuto.Models.Car
 
@@ -13,11 +14,10 @@
             @Html.LabelFor(model => model.SiteId)
         </div>
         <div class="editor-field">
-            @Html.DropDownListFor(model => model.SiteId, CshtmlHelper.GetSites(0), new { @class = "form-control", @style = "width:150px;" })
+            @Html.DropDownListFor(model => model.SiteId,  new SelectList(ViewBag.SiteList as List<Site>, "SiteId", "FullName", 0)  , new { @class = "form-control", @style = "width:150px;" })
             @Html.ValidationMessageFor(model => model.SiteId)
         </div>
 
-      
         <div class="editor-label">
             @Html.LabelFor(model => model.Manufacturer)
         </div>
@@ -33,7 +33,6 @@
             @Html.EditorFor(model => model.Type, new { @class = "form-control" })
             @Html.ValidationMessageFor(model => model.Type)
         </div>
-
 
         <div class="editor-label">
             @Html.LabelFor(model => model.Year)

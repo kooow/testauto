@@ -1,4 +1,7 @@
-﻿using NHibernate;
+﻿using Autofac;
+using Autofac.Core;
+using Autofac.Integration.Mvc;
+using NHibernate;
 using NHibernate.Context;
 using System;
 using System.Collections.Generic;
@@ -8,6 +11,8 @@ using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using TestAuto.Controllers;
+using TestAuto.Helper;
 
 namespace TestAuto
 {
@@ -16,10 +21,11 @@ namespace TestAuto
 
     public class MvcApplication : System.Web.HttpApplication
     {
+
         /// <summary>
         /// 
         /// </summary>
-        public static ISessionFactory NHibernateSessionFactory;
+        public static IContainer container;
 
         /// <summary>
         /// 
@@ -40,7 +46,11 @@ namespace TestAuto
         /// <param name="e"></param>
         void MvcApplication_BeginRequest(object sender, EventArgs e)
         {
-            ISession session = NHibernateSessionFactory.OpenSession();
+         
+            NHibernateHelper helper;
+            container.TryResolve(out helper);
+
+            ISession session = helper.SessionFactory.OpenSession();
             CurrentSessionContext.Bind(session);
         }
 
@@ -51,10 +61,13 @@ namespace TestAuto
         /// <param name="e"></param>
         void MvcApplication_EndRequest(object sender, EventArgs e)
         {
-            ISession session = CurrentSessionContext.Unbind(NHibernateSessionFactory);
-            session.Dispose();
-        }
+           NHibernateHelper helper;
+           container.TryResolve(out helper);
 
+           ISession session = helper.SessionFactory.GetCurrentSession();
+           session.Dispose();
+
+        }
     
         /// <summary>
         /// 
@@ -69,7 +82,17 @@ namespace TestAuto
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             AuthConfig.RegisterAuth();
 
-            NHibernateSessionFactory = Helper.NHibernateHelper.GetNHibernateSessionFactory();
+            ContainerBuilder cBuilder = new ContainerBuilder();
+            cBuilder.RegisterControllers(typeof(MvcApplication).Assembly);
+
+            // NHibernateHelper osztály berakása az autofac konténerbe
+            NHibernateHelper helper = new NHibernateHelper();
+            cBuilder.RegisterInstance<NHibernateHelper>(helper).ExternallyOwned();
+    
+            MvcApplication.container = cBuilder.Build();
+
+            DependencyResolver.SetResolver(new AutofacDependencyResolver(container));
+
 
         }
     }

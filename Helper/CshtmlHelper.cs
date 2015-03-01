@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NHibernate;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -26,40 +27,6 @@ namespace TestAuto.Helper
 
         /// <summary>
         /// 
-        /// Telephelyek lekérdezése
-        /// 
-        /// </summary>
-        /// <param name="selected">kijelölt elem</param>
-        /// <param name="firstempty">első elem üres-e</param>
-        /// <returns></returns>
-        public static List<SelectListItem> GetSites(int? selected = null, bool firstempty = false)
-        {
-            List<SelectListItem> sites = new List<SelectListItem>();
-
-            SiteRepository siterepo = new SiteRepository(MvcApplication.NHibernateSessionFactory.GetCurrentSession());
-
-            if (firstempty)
-            {
-                sites.Add(new SelectListItem());
-            }
-
-            foreach (Site site in siterepo.List())
-            {
-                SelectListItem site_item = new SelectListItem { Value = site.SiteId.ToString(), Text = site.ToString() };
-
-                if (selected.HasValue && selected == site.SiteId)
-                {
-                    site_item.Selected = true;
-                }
-
-                sites.Add(site_item);
-            }
-
-            return sites;
-        }
-
-        /// <summary>
-        /// 
         /// Évek 1990-ig a beadott évtől
         /// 
         /// </summary>
@@ -76,7 +43,6 @@ namespace TestAuto.Helper
                 years.Add(new SelectListItem());
             }
 
-
             for (int year = from; year >= 1900; year--)
             {
                 SelectListItem year_item = new SelectListItem { Value = year.ToString(), Text = year.ToString() };
@@ -91,8 +57,6 @@ namespace TestAuto.Helper
 
             return years;
         }
-
-
 
     }
 }
