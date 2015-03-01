@@ -1,9 +1,12 @@
 ﻿using FluentNHibernate.Automapping;
 using FluentNHibernate.Cfg;
 using FluentNHibernate.Cfg.Db;
+using FluentNHibernate.Conventions.Helpers;
 using NHibernate;
 using NHibernate.Cfg;
+using NHibernate.Cfg.MappingSchema;
 using NHibernate.Context;
+using NHibernate.Mapping.ByCode;
 using NHibernate.Tool.hbm2ddl;
 using System;
 using System.Collections.Generic;
@@ -55,7 +58,9 @@ namespace TestAuto.Helper
                 dbi.ConnectionStringName = "testAutoHibernate";
                 dbi.Dialect<NHibernate.Dialect.MsSql2012Dialect>();
                 dbi.Driver<NHibernate.Driver.SqlClientDriver>();
+             
             });
+
 
             // nhibernate konfiguráció
             FluentConfiguration fluent_conf = Fluently.Configure(conf);
@@ -63,12 +68,12 @@ namespace TestAuto.Helper
             fluent_conf.CurrentSessionContext<WebSessionContext>();
 
             sessionFactory = fluent_conf
-              .Mappings(m => m.FluentMappings.Add<CarMapping>())
-              .Mappings(m => m.FluentMappings.Add<SiteMapping>())
-              .BuildSessionFactory();
+                  .Mappings(m => m.FluentMappings.Add<CarMapping>())
+                  .Mappings(m => m.FluentMappings.Add<SiteMapping>())
+                  .BuildSessionFactory();
 
         }
- 
+
 
     }
 }

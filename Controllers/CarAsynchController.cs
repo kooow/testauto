@@ -40,7 +40,7 @@ namespace TestAuto.Controllers
 
         /// <summary>
         /// 
-        /// Aszikron kérés (autó lista) visszaadása
+        /// Aszikron kérésben autó lista és lapozás adatok (lapszám és összes) visszaadása
         /// 
         /// </summary>
         /// <param name="sortDictionary">sorbarandezéshez szükséges bemenetek</param>
@@ -160,7 +160,7 @@ namespace TestAuto.Controllers
             // autó lista konvertálása a kliens oldalra
             IList<Car> cars = ic.List<Car>();
 
-            IPagedList<Car> cars_pagedlist =  cars.ToPagedList<Car>(pageNumber, CshtmlHelper.PAGESIZE);
+            IPagedList<Car> cars_pagedlist = cars.ToPagedList<Car>(pageNumber, CshtmlHelper.PAGESIZE);
        
             var cars_converted = from c in cars_pagedlist
                                  select new  {

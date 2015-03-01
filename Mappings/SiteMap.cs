@@ -28,8 +28,8 @@ namespace TestAuto.Mappings
             Id(x => x.SiteId).GeneratedBy.Identity().Column("SiteId");
             Map(x => x.City).Column("City").Not.Nullable();
             Map(x => x.Address).Column("Address").Not.Nullable();
-            Map(x => x.Postcode).Column("PostCode").Not.Nullable();
-            Map(x => x.Parkingspace).Column("ParkingSpace").Not.Nullable();
+            Map(x => x.Postcode).Column("Postcode").Not.Nullable();
+            Map(x => x.Parkingspace).Column("Parkingspace").Not.Nullable();
             HasMany(x => x.Cars).KeyColumn("SiteId");
         }
 

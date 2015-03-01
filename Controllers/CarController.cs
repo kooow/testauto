@@ -75,17 +75,17 @@ namespace TestAuto.Controllers
         /// 
         /// </summary>
         /// <returns></returns>
-        public ActionResult List(int? page)
+        public ActionResult List()
         {
+            
+            int pageNumber = 1;
 
-            IList<Car> cars = this.carRepository.List();
-
-            int pageNumber = (page ?? 1);
+            IPagedList<Car> cars = this.carRepository.PagedAndOrderedList(pageNumber,  CshtmlHelper.PAGESIZE);
 
             ViewBag.SiteList = this.siteRepository.List();
             ViewBag.SitesWithEmpty = GetSitesWithEmpty();
 
-            return View(cars.ToPagedList(pageNumber, CshtmlHelper.PAGESIZE));
+            return View(cars);
         }
 
         /// <summary>

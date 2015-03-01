@@ -5,33 +5,6 @@
 
 @model PagedList.IPagedList<TestAuto.Models.Car>
 
-
-<style>
-
-    .sortspanlink:hover
-    {
-        cursor: pointer;
-    }
-
-    .sortdesc::after
-    {
-        content: "↑";
-        color: #428bca;
-    }
-
-    .sortasc::after
-    {
-       content: "↓";
-       color: #428bca;
-    }
-
-    #FilterTr
-    {
-        border-bottom: 1px solid black;
-    }
-
-</style>
-
 <p>
     @Html.ActionLink("Új autó felvétele", "Create")
 </p>
@@ -141,7 +114,7 @@
                 inputchange();
             }
 
-            });
+        });
 
     });
 
@@ -180,7 +153,7 @@
 
         });
 
-        // ha van bemenet akkor nem a lapozásra való kattintás alapján vagyunk itt
+        // ha van bemenet akkor nem a lapozásra való kattintás alapján vagyunk ebben a függvényben
         if (pagenum != null)
         {
             data["pageNumber"] = pagenum;
@@ -201,7 +174,6 @@
            
         }
 
-
         $.ajax({
             url: '@Url.Action("List", "CarAsynch")',
             type: 'POST',
@@ -212,7 +184,7 @@
 
     }
 
-    // sorbarendezés csökkenóőnöveknő irányát mutató linkek kezelés
+    // sorbarendezés csökkenő/növeknő irányát mutató linkek kezelése
     $(".sortspanlink").click(function () {
 
         if ($(this).hasClass('sortdesc')) {
@@ -225,7 +197,7 @@
         inputchange();
     });
 
-    
+
     initPageALink();
 
     // aszinkron kérés által visszadott autólista beszúrása
@@ -258,7 +230,6 @@
             }
 
             var edit_td = $("<td>");
-            // edit_td.html('edit');
 
             // szerkesztés / tulajdonságok / törlés linkek
             var edit_link = '@Html.ActionLink("Szerkesztés", "Edit", new { id = "_carid_"  })';
@@ -313,14 +284,48 @@
     function initPageALink()
     {
 
-        // a nem active class-al rendelkező a elemek
-        $(".pagination li").not('.active').children(':first').click(function () {
+        var li_elements = $(".pagination li").not('.active');
+          
+        // sorbarendezéshez szükséges kulcs-érték párok
+        $.each(li_elements, function (i, element) {
 
-            var pagenum = parseInt( this.innerHTML );
+            var li_index = 1;
 
-            inputchange(pagenum);
+            $(element).children(':first').click(function () {
+
+
+                var pagenum = null;
+
+                li_index++;
+
+                if (this.innerHTML == "«") {
+                    var page_alink = $(".pagination").find(".active:first").children(":first");
+
+                    pagenum = parseInt(page_alink.html());
+
+                    inputchange(pagenum -1);
+                }
+                else if (this.innerHTML == "»")
+                {
+                    var page_alink = $(".pagination").find(".active:first").children(":first");
+
+                    pagenum = parseInt(page_alink.html());
+                   
+                    inputchange(pagenum+1);
+                }
+                else
+                {
+                    pagenum = parseInt(this.innerHTML);
+                    inputchange(pagenum);
+                }
+                
+
+            });
 
         });
+
+        // a nem active class-al rendelkező a html elemek kattintásának kezelése
+       // li_elements.children(':first')
         
     }
 

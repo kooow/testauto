@@ -18,7 +18,7 @@ namespace TestAuto.Models.Repositories
         /// <summary>
         /// 
         /// </summary>
-        private readonly ISession hibernateSession;
+        protected readonly ISession hibernateSession;
 
         /// <summary>
         /// 
@@ -55,6 +55,23 @@ namespace TestAuto.Models.Repositories
             ICriteria criteria = hibernateSession.CreateCriteria(typeof(TEntity));
             return criteria.List<TEntity>().ToPagedList(page, pagesize);
         }
+
+        /// <summary>
+        /// 
+        /// entitáslista lapozhaó formában és sorbarendezve
+        /// 
+        /// </summary>
+        /// <param name="page"></param>
+        /// <param name="pagesize"></param>
+        /// <returns></returns>
+        public virtual IPagedList<TEntity> PagedAndOrderedList(int page, int pagesize)
+        {
+
+            ICriteria criteria = hibernateSession.CreateCriteria(typeof(TEntity));
+            return criteria.List<TEntity>().ToPagedList(page, pagesize);
+
+        }
+
 
         /// <summary>
         ///  adatbázis rekord létrehozása az entitáson keresztül
