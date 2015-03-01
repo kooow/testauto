@@ -10,8 +10,7 @@ namespace TestAuto.Controllers
 {
     /// <summary>
     /// 
-    /// 
-    /// 
+    ///  
     /// </summary>
     public class SiteController : Controller
     {
@@ -73,7 +72,6 @@ namespace TestAuto.Controllers
             }
         }
 
-
         /// <summary>
         /// 
         /// </summary>
@@ -84,7 +82,6 @@ namespace TestAuto.Controllers
             Site site = this.siteRepository.Get(id);
             return View(site);
         }
-
 
         /// <summary>
         /// 
@@ -110,6 +107,7 @@ namespace TestAuto.Controllers
         }
 
         /// <summary>
+        /// 
         /// 
         /// 
         /// </summary>
@@ -157,7 +155,6 @@ namespace TestAuto.Controllers
                 throw exp;
             }
         }
-
 
     }
 }

@@ -8,6 +8,7 @@ using TestAuto.Models;
 using TestAuto.Models.Repositories;
 using PagedList;
 using System.ComponentModel.DataAnnotations;
+using TestAuto.Helper;
 
 namespace TestAuto.Controllers
 {
@@ -46,17 +47,18 @@ namespace TestAuto.Controllers
         /// 
         /// </summary>
         /// <returns></returns>
-        public ActionResult List(string sort, int? page)
+        public ActionResult List(int? page)
         {
 
+            string sort = "site";
 
-            ViewBag.SiteSort = sort == "site" ? "site_desc" : "site";
+          /*  ViewBag.SiteSort = sort == "site" ? "site_desc" : "site";
             ViewBag.TypeSort = sort == "type" ? "type_desc" : "type";
             ViewBag.ManufacturerSort = sort == "manufacturer" ? "manufacturer_desc" : "manufacturer";
             ViewBag.ProductionDateSort = sort == "productiondate" ? "productiondate_desc" : "productiondate";
             ViewBag.YearSort = sort == "year" ? "year_desc" : "year";
             ViewBag.ConditionSort = sort == "condition" ? "condition_desc" : "condition";
-            ViewBag.OwnersSort = sort == "owners" ? "owners_desc" : "owners";
+            ViewBag.OwnersSort = sort == "owners" ? "owners_desc" : "owners"; */
 
             IList<Car> cars = this.carRepository.List();
 
@@ -68,7 +70,7 @@ namespace TestAuto.Controllers
             {
                 cars = cars.OrderByDescending(c => (c.Site.City + " " + c.Site.Address + c.Site.Postcode)).ToList();
             }
-            else if (sort == "type")
+          /*  else if (sort == "type")
             {
                 cars = cars.OrderBy(c => c.Type).ToList();
             }
@@ -116,14 +118,13 @@ namespace TestAuto.Controllers
             {
                 cars = cars.OrderByDescending(c => c.Owners).ToList();
             }
-
-
-            int pageSize = 10;
+            */
+  
             int pageNumber = (page ?? 1);
 
             ViewBag.CurrentSort = sort;
 
-            return View(cars.ToPagedList(pageNumber, pageSize));
+            return View(cars.ToPagedList(pageNumber, CshtmlHelper.PAGESIZE));
         }
 
         /// <summary>

@@ -204,11 +204,9 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helper\CshtmlHelper.cs" />
-    <Compile Include="Helper\NHibernateContractResolver.cs" />
     <Compile Include="Helper\NHibernateHelper.cs" />
     <Compile Include="Mappings\CarMap.cs" />
     <Compile Include="Mappings\SiteMap.cs" />
-    <Compile Include="Nhibernate\TestAutoConfiguration.cs" />
     <Compile Include="Models\Car.cs" />
     <Compile Include="Models\Repositories\GenericRepository.cs" />
     <Compile Include="Models\Repositories\SiteRepository.cs" />
@@ -294,6 +292,7 @@
     <Content Include="Scripts\ui\jquery-ui.custom.js" />
     <Content Include="Scripts\ui\jquery.ui.core.js" />
     <Content Include="Scripts\ui\jquery.ui.datepicker.js" />
+    <Content Include="SQL\Create TestAutoDb.sql" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -330,7 +329,6 @@
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
-    <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Web.config" />
     <Content Include="Views\Car\List.cshtml" />
@@ -348,6 +346,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Filters\" />
+    <Folder Include="Nhibernate\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

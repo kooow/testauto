@@ -13,7 +13,7 @@ using System.Reflection;
 using System.Web;
 using TestAuto.Mappings;
 using TestAuto.Models;
-using TestAuto.Nhibernate;
+
 
 namespace TestAuto.Helper
 {
@@ -46,23 +46,14 @@ namespace TestAuto.Helper
 
             });
     
-
-            // Assembly asm =Assembly.GetExecutingAssembly();
-
-          //  TestAutoConfiguration testconf = new TestAutoConfiguration();
-
+            // nhibernate konfiguráció
             FluentConfiguration fluent_conf = Fluently.Configure(conf);
-
-         //   new SchemaUpdate(conf).Execute(true, true);
 
             fluent_conf.CurrentSessionContext<WebSessionContext>();
 
             ISessionFactory sessionFactory = fluent_conf              
                   .Mappings(m => m.FluentMappings.Add<CarMapping>())
                   .Mappings(m => m.FluentMappings.Add<SiteMapping>())                      
-                  //  m.AutoMappings.Add(
-                  // your automapping setup here
-                  //    AutoMap.AssemblyOf<Car>(testconf)))
                   .BuildSessionFactory();
 
       

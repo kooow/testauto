@@ -11,11 +11,14 @@ using System.Web.Mvc;
 using System.Web.SessionState;
 using TestAuto.Helper;
 using TestAuto.Models;
+using PagedList;
 
 namespace TestAuto.Controllers
 {
 
     /// <summary>
+    /// 
+    /// 
     /// 
     /// </summary>
     [SessionState(SessionStateBehavior.Disabled)]
@@ -24,39 +27,43 @@ namespace TestAuto.Controllers
 
         /// <summary>
         /// 
-        /// Aszikron autó lista visszaadása
+        /// Aszikron kérés (autó lista) visszaadása
         /// 
         /// </summary>
         /// <param name="sortDictionary">sorbarandezéshez szükséges bemenetek</param>
-        /// <param name="filterDictionary">szűréshez szükséges bementek</param>
+        /// <param name="filterDictionary">szűréshez szükséges bemenetek</param>
+        /// <param name="pageNumber">oldalszám</param>
         /// <returns></returns>
-        public JsonResult List(Dictionary<string, string> sortDictionary, Dictionary<string,string> filterDictionary)
+        public JsonResult List(Dictionary<string, string> sortDictionary, Dictionary<string,string> filterDictionary, int pageNumber)
         {
 
             List<object> objs = new List<object>();
 
             ISession session =  MvcApplication.NHibernateSessionFactory.GetCurrentSession();
 
-            ICriteria ic = session.CreateCriteria<Car>();
+            ICriteria ic = session.CreateCriteria<Car>("car");
+
+            // kapcsolt tábla azonosító eq
+            List<string> connected_eq_ids = new List<string>(new string[] { "SiteId" });
 
             // melyiknél csináluk eq Restriction-t
-            List<string> eq_ids = new List<string>( new string[] { // "SiteId",
+            List<string> eq_ids = new List<string>(new string[] {
                 "Year", "Productiondate", "Owners"});
 
             // és melyiknél like-ot, nyílván a string-eseknél
             List<string> like_ids = new List<string>( new string[] { "Type", "Manufacturer", "Condition"  } );
 
-            // melyiket mivé konvertáljuk, ami nincs itt az marad string
+            // melyiket mivé konvertáljuk, ami nincs itt az marad string bemenet
             List<string> date_properties = new List<string>(new string[] { "Productiondate" });
-            List<string> int_properties = new List<string>(new string[] { "Year", "Owners" });
+            List<string> int_properties = new List<string>(new string[] { "Year", "Owners", "SiteId" });
 
-      
 
             foreach (KeyValuePair<string, string> filter in filterDictionary)
             {
                 ICriterion added_criteria = null;
                 object filter_value = null;
 
+                // dátum esetén megpróbálunk konvertálni
                 if (date_properties.Contains( filter.Key) && filter.Value != "")
                 {
                     DateTime filter_date = DateTime.MinValue;
@@ -68,6 +75,7 @@ namespace TestAuto.Controllers
                         filter_value = DateTime.Parse(filter.Value);
                     }
                 }
+                // int esetén konvertálunk
                 else if (int_properties.Contains(filter.Key) && filter.Value != "")
                 {
                     filter_value = Int32.Parse(filter.Value);
@@ -81,15 +89,23 @@ namespace TestAuto.Controllers
                 // ha van értékünk kliensről
                 if (filter_value != null)
                 {
-                    if (eq_ids.Contains(filter.Key))
+                    //  ha kapcsolód tábla id-t keresünk
+                    if (connected_eq_ids.Contains(filter.Key))
+                    {
+                        // feltételezzük hogy a kapcsolódó Id neve és a tábla neve kapcsolatban van
+                        // pl:   ic = ic.Add(Restrictions.Eq("car.Site.SiteId", 2));
+                        added_criteria = Restrictions.Eq("car." + filter.Key.Replace("Id", "") + "." +  filter.Key, filter_value);
+                    }
+                    // ha csak sima int egyenlőséget
+                    else if (eq_ids.Contains(filter.Key))
                     {
                         added_criteria = Restrictions.Eq(filter.Key, filter_value);
                     }
+                    // ha szövegrészlet egyenlőséget
                     else if (like_ids.Contains(filter.Key))
                     {
                         added_criteria = Restrictions.Like(filter.Key, filter_value);
                     }
-
                 }
 
                 if (added_criteria != null)
@@ -98,14 +114,9 @@ namespace TestAuto.Controllers
                 }
             }
 
-
-
             foreach (KeyValuePair<string, string> sortkv in sortDictionary)
             {
-
                 string propname = sortkv.Key.Replace("Sort", "");
-
-                if (propname == "Site") continue;
 
                 if ( sortkv.Value.ToLower() == "asc")
                 {
@@ -115,18 +126,15 @@ namespace TestAuto.Controllers
                 {
                     ic = ic.AddOrder(Order.Desc(propname));
                 }
-
-
-
             }
 
-
-
-            // autó lista konvertálás a kliens oldalra
+            // autó lista konvertálása a kliens oldalra
             IList<Car> cars = ic.List<Car>();
 
-            var cars_converted =   from c in cars
-                                select new  {
+            IPagedList<Car> cars_pagedlist =  cars.ToPagedList<Car>(pageNumber, CshtmlHelper.PAGESIZE);
+       
+            var cars_converted = from c in cars_pagedlist
+                                 select new  {
                                     CardId = c.CarId,
                                     Manufacturer = c.Manufacturer,
                                     Type = c.Type,
@@ -135,16 +143,15 @@ namespace TestAuto.Controllers
                                     Condition = c.Condition,
                                     Owners = ( c.Owners.HasValue ? c.Owners.ToString() : ""),
                                     Site = c.Site.ToString()
-                                };
-
-
+                                 };
 
             string output = JsonConvert.SerializeObject(cars_converted);
             JsonResult jsonres = new JsonResult();
-            jsonres.Data = output;
+            jsonres.Data = new { cars = output, pagenumber = cars_pagedlist.PageNumber, pagecount = cars_pagedlist.PageCount };
 
             return jsonres;
         }
+
 
     }
 }

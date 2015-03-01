@@ -18,6 +18,12 @@ namespace TestAuto.Helper
     /// </summary>
     public class CshtmlHelper
     {
+
+        /// <summary>
+        /// lapon szereplő elemek száma
+        /// </summary>
+        public static int PAGESIZE = 10;
+
         /// <summary>
         /// 
         /// Telephelyek lekérdezése

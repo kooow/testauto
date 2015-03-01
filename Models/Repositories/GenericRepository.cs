@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using PagedList;
 
 namespace TestAuto.Models.Repositories
 {
@@ -40,7 +41,20 @@ namespace TestAuto.Models.Repositories
            // IList<TEntity> entities = hibernateSession.CreateQuery("from " + typeof(TEntity)).List<TEntity>();
           //  return entities;
         }
-       
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="page"></param>
+        /// <param name="pagesize"></param>
+        /// <returns></returns>
+        public IPagedList<TEntity> List(int page, int pagesize)
+        {
+            ICriteria criteria = hibernateSession.CreateCriteria(typeof(TEntity));
+            return criteria.List<TEntity>().ToPagedList(page, pagesize);
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -72,7 +86,6 @@ namespace TestAuto.Models.Repositories
             }
         }
 
-
         /// <summary>
         /// 
         /// </summary>
@@ -84,7 +97,6 @@ namespace TestAuto.Models.Repositories
                 hibernateSession.Delete(entity);
                 tran.Commit();
             }
-
         }
 
         /// <summary>
