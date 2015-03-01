@@ -14,25 +14,25 @@
     <table id="CarTable">
         <tr>
             <th class="lista_th">
-                <span id="SiteSort" class="sortspanlink sortasc">Telephely</span>
+                <span id="SiteSort" class="sortspanlink">Telephely</span>
             </th>
             <th class="lista_th">
-                <span id="TypeSort" class="sortspanlink sortasc">Típus</span>
+                <span id="TypeSort" class="sortspanlink">Típus</span>
             </th>
             <th class="lista_th">
-                <span id="ManufacturerSort" class="sortspanlink sortasc">Gyártó</span>
+                <span id="ManufacturerSort" class="sortspanlink">Gyártó</span>
             </th>
             <th class="lista_th">
-                <span id="YearSort" class="sortspanlink sortasc">Évjárat</span>    
+                <span id="YearSort" class="sortspanlink">Évjárat</span>    
             </th>
             <th class="lista_th">
-                <span id="ProductiondateSort" class="sortspanlink sortasc">Gyártási idő</span>
+                <span id="ProductiondateSort" class="sortspanlink">Gyártási idő</span>
             </th>
             <th class="lista_th">
-                <span id="ConditionSort" class="sortspanlink sortasc">Állapot</span>
+                <span id="ConditionSort" class="sortspanlink">Állapot</span>
             </th>
             <th class="lista_th">
-                <span id="OwnersSort" class="sortspanlink sortasc">Tulajdonosok száma</span>
+                <span id="OwnersSort" class="sortspanlink">Tulajdonosok száma</span>
             </th>
 
             <th style="min-width: 280px;"></th>
@@ -119,7 +119,7 @@
     });
 
     // select lista változásának kezelése
-    $("#carlistform select").on('input', function () {
+    $("#carlistform select").on('change', function () {
         inputchange();
     });
 
@@ -135,11 +135,24 @@
 
         var data = { };
 
+        var sortindex = 0;
+
         // sorbarendezéshez szükséges kulcs-érték párok
         $.each($(".sortspanlink"), function (i, element) {
 
-            data["sortDictionary[" + i + "].Key"] = element.id;
-            data["sortDictionary[" + i + "].Value"] = ($(element).hasClass('sortasc') ? "asc" : "desc");
+            if ( $(element).hasClass('sortasc') ) 
+            {   
+                data["sortDictionary[" + sortindex + "].Key"] = element.id;
+                data["sortDictionary[" + sortindex + "].Value"] = "asc";
+                sortindex++;
+            }
+            else if ( $(element).hasClass('sortdesc') )
+            {
+                data["sortDictionary[" + sortindex + "].Key"] = element.id;
+                data["sortDictionary[" + sortindex + "].Value"] = "desc";
+                sortindex++;
+            }
+           
 
         });
 
@@ -187,11 +200,17 @@
     // sorbarendezés csökkenő/növeknő irányát mutató linkek kezelése
     $(".sortspanlink").click(function () {
 
+
         if ($(this).hasClass('sortdesc')) {
             $(this).removeClass('sortdesc').addClass('sortasc');
         }
         else if ($(this).hasClass('sortasc')) {
             $(this).removeClass('sortasc').addClass('sortdesc');
+        }
+        // ha még nincs 1 se akkor alapértelmezetten a desc-et kapja
+        else
+        {
+            $(this).addClass('sortdesc');
         }
 
         inputchange();

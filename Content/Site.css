@@ -772,12 +772,12 @@ tr.pager td {
 }
 
 .sortdesc::after {
-    content: "↑";
+    content: "↓";
     color: #428bca;
 }
 
 .sortasc::after {
-    content: "↓";
+    content: "↑";
     color: #428bca;
 }
 

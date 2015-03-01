@@ -80,12 +80,13 @@ namespace TestAuto.Controllers
             
             int pageNumber = 1;
 
-            IPagedList<Car> cars = this.carRepository.PagedAndOrderedList(pageNumber,  CshtmlHelper.PAGESIZE);
+            IList<Car> cars = this.carRepository.List();
+            IPagedList<Car> cars_paged = cars.ToPagedList(pageNumber, CshtmlHelper.PAGESIZE);
 
             ViewBag.SiteList = this.siteRepository.List();
             ViewBag.SitesWithEmpty = GetSitesWithEmpty();
 
-            return View(cars);
+            return View(cars_paged);
         }
 
         /// <summary>
