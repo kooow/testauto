@@ -29,8 +29,8 @@ namespace TestAuto.Helper
         /// Telephelyek lekérdezése
         /// 
         /// </summary>
-        /// <param name="selected"></param>
-        /// <param name="firstempty"></param>
+        /// <param name="selected">kijelölt elem</param>
+        /// <param name="firstempty">első elem üres-e</param>
         /// <returns></returns>
         public static List<SelectListItem> GetSites(int? selected = null, bool firstempty = false)
         {

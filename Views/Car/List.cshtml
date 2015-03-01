@@ -64,7 +64,7 @@
         </tr>
         <tr id="FilterTr">
             <td>
-                @Html.DropDownList("SiteId", CshtmlHelper.GetSites(0, true), new { @class = "form-control" })
+                @Html.DropDownList("SiteId", CshtmlHelper.GetSites(0, true), new { @class = "form-control", @style="width:120px;" })
             </td>
             <td>
                 @Html.TextBox("Type", "", new { @style = "width:130px;" })

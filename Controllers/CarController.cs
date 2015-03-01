@@ -38,7 +38,6 @@ namespace TestAuto.Controllers
 
             this.carRepository = new CarRepository(MvcApplication.NHibernateSessionFactory.GetCurrentSession());
             this.siteRepository = new SiteRepository(MvcApplication.NHibernateSessionFactory.GetCurrentSession());
-
         }
 
         /// <summary>
@@ -52,14 +51,6 @@ namespace TestAuto.Controllers
 
             string sort = "site";
 
-          /*  ViewBag.SiteSort = sort == "site" ? "site_desc" : "site";
-            ViewBag.TypeSort = sort == "type" ? "type_desc" : "type";
-            ViewBag.ManufacturerSort = sort == "manufacturer" ? "manufacturer_desc" : "manufacturer";
-            ViewBag.ProductionDateSort = sort == "productiondate" ? "productiondate_desc" : "productiondate";
-            ViewBag.YearSort = sort == "year" ? "year_desc" : "year";
-            ViewBag.ConditionSort = sort == "condition" ? "condition_desc" : "condition";
-            ViewBag.OwnersSort = sort == "owners" ? "owners_desc" : "owners"; */
-
             IList<Car> cars = this.carRepository.List();
 
             if (sort == "site")
@@ -70,56 +61,7 @@ namespace TestAuto.Controllers
             {
                 cars = cars.OrderByDescending(c => (c.Site.City + " " + c.Site.Address + c.Site.Postcode)).ToList();
             }
-          /*  else if (sort == "type")
-            {
-                cars = cars.OrderBy(c => c.Type).ToList();
-            }
-            else if (sort == "type_desc")
-            {
-                cars = cars.OrderByDescending(c => c.Type).ToList();
-            }
-            else if (sort == "year")
-            {
-                cars = cars.OrderBy(c => c.Year).ToList();
-            }
-            else if (sort == "year_desc")
-            {
-                cars = cars.OrderByDescending(c => c.Year).ToList();
-            }
-            else if (sort == "manufacturer")
-            {
-                cars = cars.OrderBy(c => c.Manufacturer).ToList();
-            }
-            else if (sort == "manufacturer_desc")
-            {
-                cars = cars.OrderByDescending(c => c.Manufacturer).ToList();
-            }
-            else if (sort == "productiondate")
-            {
-                cars = cars.OrderBy(c => c.Productiondate).ToList();
-            }
-            else if (sort == "productiondate_desc")
-            {
-                cars = cars.OrderByDescending(c => c.Productiondate).ToList();
-            }
-            else if (sort == "condition")
-            {
-                cars = cars.OrderBy(c => c.Condition).ToList();
-            }
-            else if (sort == "condition_desc")
-            {
-                cars = cars.OrderByDescending(c => c.Condition).ToList();
-            }
-            else if (sort == "owners")
-            {
-                cars = cars.OrderBy(c => c.Owners).ToList();
-            }
-            else if (sort == "owners_desc")
-            {
-                cars = cars.OrderByDescending(c => c.Owners).ToList();
-            }
-            */
-  
+      
             int pageNumber = (page ?? 1);
 
             ViewBag.CurrentSort = sort;
@@ -137,7 +79,7 @@ namespace TestAuto.Controllers
         }
 
         /// <summary>
-        /// 
+        /// autó létrehozása
         /// </summary>
         /// <param name="car"></param>
         /// <returns></returns>
@@ -164,7 +106,7 @@ namespace TestAuto.Controllers
         }
 
         /// <summary>
-        /// 
+        /// autó szerkesztése
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -177,7 +119,7 @@ namespace TestAuto.Controllers
 
         /// <summary>
         /// 
-        /// 
+        /// autó szerkesztésnek mentése
         /// 
         /// </summary>
         /// <param name="car"></param>
@@ -193,8 +135,7 @@ namespace TestAuto.Controllers
                     Site site = this.siteRepository.Get(car.SiteId);
                     car.Site = site;
 
-                    this.carRepository.Update(car);
-                  
+                    this.carRepository.Update(car);                 
                 }
                 return RedirectToAction("List");
             }
@@ -202,12 +143,11 @@ namespace TestAuto.Controllers
             {
                 throw exception;
             }
-
         }
 
         /// <summary>
         /// 
-        /// 
+        /// Autó tulajdonságai ablak
         /// 
         /// </summary>
         /// <param name="id"></param>
@@ -220,7 +160,7 @@ namespace TestAuto.Controllers
 
         /// <summary>
         /// 
-        /// 
+        /// autó törlése ablak
         /// 
         /// </summary>
         /// <param name="id"></param>
@@ -233,7 +173,7 @@ namespace TestAuto.Controllers
 
         /// <summary>
         /// 
-        /// 
+        /// autó törlése ablak felküldése, a tényleges törlés
         /// 
         /// </summary>
         /// <param name="car"></param>
@@ -243,8 +183,9 @@ namespace TestAuto.Controllers
         {
             try
             {
+                Car deleteCar = this.carRepository.Get(car.CarId);
 
-                this.carRepository.Delete(car);
+                this.carRepository.Delete(deleteCar);
 
                 return RedirectToAction("List");
             }

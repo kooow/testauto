@@ -12,7 +12,7 @@ namespace TestAuto.Mappings
 {
     /// <summary>
     /// 
-    /// 
+    /// Car entitás leképezési modelje
     /// 
     /// </summary>
     public class CarMapping : ClassMap<Car>

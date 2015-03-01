@@ -9,7 +9,8 @@ namespace TestAuto.Models.Repositories
 {
 
     /// <summary>
-    /// /
+    /// Közös generikus adatbázisműveletek kezelését végző osztály
+    /// a megadott entitásoz kapcsolódóan
     /// </summary>
     public class GenericRepository<TEntity> where TEntity : class
     {
@@ -38,16 +39,16 @@ namespace TestAuto.Models.Repositories
             ICriteria criteria = hibernateSession.CreateCriteria(typeof(TEntity));
             return criteria.List<TEntity>();
         
-           // IList<TEntity> entities = hibernateSession.CreateQuery("from " + typeof(TEntity)).List<TEntity>();
-          //  return entities;
+       
         }
-
 
         /// <summary>
         /// 
+        /// entitáslista lapozható formátumban visszaadva
+        /// 
         /// </summary>
-        /// <param name="page"></param>
-        /// <param name="pagesize"></param>
+        /// <param name="page">aktuális oldal</param>
+        /// <param name="pagesize">oldalméret</param>
         /// <returns></returns>
         public IPagedList<TEntity> List(int page, int pagesize)
         {
@@ -56,7 +57,7 @@ namespace TestAuto.Models.Repositories
         }
 
         /// <summary>
-        /// 
+        ///  adatbázis rekord létrehozása az entitáson keresztül
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
@@ -72,6 +73,7 @@ namespace TestAuto.Models.Repositories
 
         /// <summary>
         /// 
+        /// adatbázis rekord frissítése az entitáson keresztül
         /// 
         /// </summary>
         /// <param name="entity"></param>
@@ -88,6 +90,8 @@ namespace TestAuto.Models.Repositories
 
         /// <summary>
         /// 
+        /// adatbázis rekord frissítése az entitáson keresztül
+        /// 
         /// </summary>
         /// <param name="entity"></param>
         public void Delete(TEntity entity)
@@ -100,7 +104,7 @@ namespace TestAuto.Models.Repositories
         }
 
         /// <summary>
-        /// 
+        /// Visszaadjuk az etitást azonosítón keresztül
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>

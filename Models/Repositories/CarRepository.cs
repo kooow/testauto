@@ -8,7 +8,7 @@ namespace TestAuto.Models.Repositories
 {
 
     /// <summary>
-    /// 
+    /// Autó entitások kezelésére
     /// </summary>
     public class CarRepository : GenericRepository<Car>
     {
@@ -19,11 +19,9 @@ namespace TestAuto.Models.Repositories
         /// <param name="session"></param>
         public CarRepository(ISession session) : base(session)
         {
-           // this.hibernateSession = session;
+
         }
 
-   
-
-
     }
+
 }

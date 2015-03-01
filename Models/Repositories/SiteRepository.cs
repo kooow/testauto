@@ -7,7 +7,7 @@ using System.Web;
 namespace TestAuto.Models.Repositories
 {
     /// <summary>
-    /// 
+    /// Telephely entitások kezelésére
     /// </summary>
     public class SiteRepository : GenericRepository<Site>
     {

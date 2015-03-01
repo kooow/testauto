@@ -12,6 +12,8 @@ namespace TestAuto.Mappings
 {
     /// <summary>
     /// 
+    ///  Telephely entitás leképezési modelje
+    /// 
     /// </summary>
     public class SiteMapping : ClassMap<Site>
     {

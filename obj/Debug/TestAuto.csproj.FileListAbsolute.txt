@@ -88,3 +88,4 @@ D:\source\asp.net\TestAuto\TestAuto\bin\PagedList.dll
 D:\source\asp.net\TestAuto\TestAuto\bin\PagedList.Mvc.dll
 D:\source\asp.net\TestAuto\TestAuto\bin\PagedList.xml
 D:\source\asp.net\TestAuto\TestAuto\bin\PagedList.Mvc.xml
+D:\source\asp.net\TestAuto\TestAuto\obj\Debug\TestAuto.csprojResolveAssemblyReference.cache

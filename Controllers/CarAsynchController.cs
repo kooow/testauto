@@ -42,6 +42,7 @@ namespace TestAuto.Controllers
             ISession session =  MvcApplication.NHibernateSessionFactory.GetCurrentSession();
 
             ICriteria ic = session.CreateCriteria<Car>("car");
+            ic = ic.CreateAlias("Site", "s");
 
             // kapcsolt tábla azonosító eq
             List<string> connected_eq_ids = new List<string>(new string[] { "SiteId" });
@@ -114,18 +115,35 @@ namespace TestAuto.Controllers
                 }
             }
 
+
             foreach (KeyValuePair<string, string> sortkv in sortDictionary)
             {
                 string propname = sortkv.Key.Replace("Sort", "");
 
-                if ( sortkv.Value.ToLower() == "asc")
-                {
-                    ic = ic.AddOrder(Order.Asc(propname));
+                // telehely egyedi eset
+                if (propname == "Site")
+                {        
+                    if (sortkv.Value.ToLower() == "asc")
+                    {
+                        ic = ic.AddOrder(Order.Asc("s.City")).AddOrder(Order.Asc("s.Address")).AddOrder(Order.Asc("s.Postcode"));
+                    }
+                    else if (sortkv.Value.ToLower() == "desc")
+                    {
+                        ic = ic.AddOrder(Order.Desc("s.City")).AddOrder(Order.Desc("s.Address")).AddOrder(Order.Desc("s.Postcode"));
+                    }
                 }
-                else if (sortkv.Value.ToLower() == "desc")
+                else
                 {
-                    ic = ic.AddOrder(Order.Desc(propname));
+                    if (sortkv.Value.ToLower() == "asc")
+                    {
+                        ic = ic.AddOrder(Order.Asc(propname));
+                    }
+                    else if (sortkv.Value.ToLower() == "desc")
+                    {
+                        ic = ic.AddOrder(Order.Desc(propname));
+                    }
                 }
+               
             }
 
             // autó lista konvertálása a kliens oldalra

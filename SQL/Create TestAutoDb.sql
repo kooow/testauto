@@ -8,6 +8,7 @@ go
 use TestAutoDb;
 go
 
+-- telehely tábla létrehozása
 
 CREATE TABLE [dbo].[Site]
 (
@@ -24,7 +25,7 @@ CONSTRAINT [PK_dbo.Site] PRIMARY KEY CLUSTERED
 ) ON [PRIMARY]
 
 
--- create sql
+-- autó tábla létrehozása
 
 CREATE TABLE [dbo].[Car]
 (
